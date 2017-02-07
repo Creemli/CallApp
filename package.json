@@ -42,5 +42,8 @@
     "webpack-dev-middleware": "^1.9.0",
     "webpack-dev-server": "^1.16.2",
     "webpack-hot-middleware": "^2.14.0"
+  },
+  "dependencies": {
+    "jquery": "^3.1.1"
   }
 }

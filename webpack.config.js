@@ -49,9 +49,9 @@ module.exports = {
             template: "./index.html",
         }),
         new ExtractTextPlugin('[name].css'),
-        // new webpack.ProvidePlugin({
-        //     $: "jquery",
-        // }),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+        }),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
         new webpack.optimize.OccurenceOrderPlugin(),
