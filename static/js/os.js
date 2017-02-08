@@ -4,7 +4,7 @@
  */
 
 (function (WIN, envLib) {
-    envLib = envLib|| {};
+    envLib = envLib || {};
     var userAgent = WIN.navigator.userAgent,
         temp;
     var os;
@@ -36,7 +36,7 @@
             isWindowsPhone: true,
             version: temp[1]
         }
-    }else {
+    } else {
         os = {
             name: 'unknown',
             version: '0.0.0'
@@ -46,7 +46,7 @@
 
 // 获取宿主APP
     var browser;
-    if(temp = userAgent.match(/(?:UCWEB|UCBrowser\/)([\d\.]+)/)) {
+    if (temp = userAgent.match(/(?:UCWEB|UCBrowser\/)([\d\.]+)/)) {
         browser = {
             name: 'UC',
             isUC: true,
@@ -64,20 +64,26 @@
             isFirefox: true,
             version: temp[1]
         };
-    } else  if ((temp = userAgent.match(/MSIE\s([\d\.]+)/)) ||
+    } else if(temp = userAgent.match(/baidubrowser\/([\d\.]+)/)){
+        browser ={
+            name: 'Baidu',
+            isBaidu:true,
+            versions: temp[1],
+        };
+    } else if ((temp = userAgent.match(/MSIE\s([\d\.]+)/)) ||
         (temp = userAgent.match(/IEMobile\/([\d\.]+)/))) {
-            browser = {version: temp[1]};
-            if (userAgent.match(/IEMobile/)) {
-                browser.name = 'IEMobile';
-                browser.isIEMobile = true;
-            } else {
-                browser.name = 'IE';
-                browser.isIE = true;
-            }
+        browser = {version: temp[1]};
+        if (userAgent.match(/IEMobile/)) {
+            browser.name = 'IEMobile';
+            browser.isIEMobile = true;
+        } else {
+            browser.name = 'IE';
+            browser.isIE = true;
+        }
 
-            if (userAgent.match(/Android|iPhone/)) {
-                browser.isIELikeWebkit = true;
-            }
+        if (userAgent.match(/Android|iPhone/)) {
+            browser.isIELikeWebkit = true;
+        }
     } else if (temp = userAgent.match(/(?:Chrome|CriOS)\/([\d\.]+)/)) {
         browser = {
             name: 'Chrome',
@@ -88,7 +94,7 @@
             browser.name = 'Chrome Webview';
             browser.isWebview = true;
             browser.isAndroid = true;
-        } 
+        }
     } else if (userAgent.match(/Safari/)) {
         if (temp = userAgent.match(/Android[\s\/]([\d\.]+)/)) {
             browser = {
@@ -121,7 +127,6 @@
     }
 
 
-
 // 获取第三方App
     var thirdapp;
 
@@ -141,6 +146,14 @@
         thirdapp = {
             isTxtong: true
         };
+    } else if (userAgent.match(/QQ\//ig)) {
+        thirdapp = {
+            isQQ: true,
+        }
+    } else if (userAgent.match(/Weibo/ig)) {
+        thirdapp = {
+            isWeibo: true,
+        }
     }
 
 
@@ -151,7 +164,8 @@
         device = {
             isSamsung: true,
         };
-    } else if (userAgent.match(/HM|RedMi|Mi/ig)) {
+    } else if (userAgent.match(/HM|RedMi|Mi\s/ig)) {
+        //FIXME Mi会匹配微信的micromessenger，需要修复
         device = {
             isXiaomi: true,
         };
@@ -159,7 +173,7 @@
         device = {
             isHuawei: true,
         }
-    } else  if (userAgent.match(/vivo/ig)) {
+    } else if (userAgent.match(/vivo/ig)) {
         device = {isVivo: true};
     }
 

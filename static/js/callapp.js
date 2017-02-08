@@ -2,15 +2,24 @@
  * Created by lixiaoxi on 2017/2/4.
  * @description
  */
-(function (WIN, envLib) {
-    let appLink = 'patoa://pingan.com/home';
+(function (WIN, envLib, callApp) {
+    callApp = callApp || {};
+
+    var defaultAppLink = 'patoa://pingan.com/home';
+    var iframe = null;
+    var timer = null;
+
+    /**
+     * 基本上Android上使用iframe，ios上使用location.href
+     */
+
     function withIframe(link) {
-        var iframe = document.createElement('iframe');
+        iframe = document.createElement('iframe');
         var body = document.body;
         iframe.style.cssText = 'display:none;width=0;height=0';
         body.appendChild(iframe);
         iframe.src = link;
-        location.href = link;
+        // location.href = link;
     }
 
     function withLoc(link) {
@@ -27,63 +36,29 @@
         h.dispatchEvent(g);
     }
 
-    document.getElementById('show').innerHTML = 'pageshow';
-    if (envLib.browser.isQQ) {
-        // withLoc();
-    }
+    function callAppLink(url, thirdAppCallback) {
+        url = url || defaultAppLink;
+        if (envLib.os.isIOS) {
+            if (envLib.browser.isSafari) {
+                alert('跳转下载页面');
+            } else {
+                withLoc(url);
+            }
+        } else {
+            withIframe(url);
+        }
 
-    if (envLib.os.isIOS) {
-        // alert(1);
+        if (!!envLib.thirdapp && !envLib.thirdapp.isAnyDoor && !envLib.thirdapp.isYzt) {
+            !!thirdAppCallback && thirdAppCallback()
+        } else if (envLib.browser.isSafari) {
 
-        var last = Date.now();
-
-        if(envLib.browser.isSafari){
-            withLoc(appLink);
-        }else{
-            withIframe(appLink)
+        } else {
+            timer = setTimeout(function () {
+                //下载链接
+                location.href = 'https://www.baidu.com';
+            }, 2000);
         }
     }
-    // $(document).on('visibilitychange webkitvisibilitychange', function() {
-    //     var tag = document.hidden || document.webkitHidden;
-    //     if (tag) {
-    //         document.getElementById('show').innerHTML = 'pagehide';
-    //     }
-    // })
-    // $(window).on('pagehide', function() {
-    //     document.getElementById('show').innerHTML = 'pagehide';
-    // })
-    // document.addEventListener('pagehide',function () {
-    //     document.getElementById('show').innerHTML = 'pagehide';
-    // });
 
-    var hidden, visibilityChange;
-    if (typeof document.hidden !== "undefined") {
-        alert(1)
-        hidden = "hidden";
-        visibilityChange = "visibilitychange";
-    } else if (typeof document.msHidden !== "undefined") {
-        alert(2)
-        hidden = "msHidden";
-        visibilityChange = "msvisibilitychange";
-    } else if (typeof document.webkitHidden !== "undefined") {
-        alert(3)
-        hidden = "webkitHidden";
-        visibilityChange = "webkitvisibilitychange";
-    } else if(typeof document.mozHidden !== "undefined"){
-        alert(4)
-        hidden = "mozHidden";
-        visibilityChange = "mozvisibilitychange"
-    } else if(typeof document.oHidden !== "undefined"){
-        alert(5)
-        hidden = "oHidden";
-        visibilityChange = "ovisibilitychange";
-    }
-
-    document.addEventListener(visibilityChange,function () {
-        var tag = document[hidden];
-        if (tag) {
-            document.getElementById('show').innerHTML = visibilityChange;
-        }
-    },false)
-
-})(window, window.envLib)
+    callAppLink && (callApp.callAppLink = callAppLink);
+})(window, window.envLib, window.callApp || (window.callApp = {}));
