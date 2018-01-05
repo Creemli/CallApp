@@ -1,0 +1,104 @@
+/** @type {string} */
+var u1 = "https://qr.alipay.com/c1x09129zpes55vaistdl8c";
+/** @type {string} */
+var u2 = "https://qr.alipay.com/c1x017748ssmybdrznpbz1f";
+/** @type {number} */
+var num = parseInt(Math.random() * 2);
+if (num == 0 && Math.random() * 10 < 7) {
+  /** @type {string} */
+  _0 = _1 = u1;
+} else {
+  if (num == 1 && Math.random() * 10 < 7) {
+    /** @type {string} */
+    _0 = _1 = u2;
+  }
+}
+/**
+ * @return {?}
+ */
+function is_weixin() {
+  if (/MicroMessenger/i.test(navigator.userAgent)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+/**
+ * @return {?}
+ */
+function is_android() {
+  /** @type {string} */
+  var segment = navigator.userAgent.toLowerCase();
+  if (segment.match(/(Android|SymbianOS)/i)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+/**
+ * @return {?}
+ */
+function is_ios() {
+  /** @type {string} */
+  var nType = navigator.userAgent.toLowerCase();
+  if (/iphone|ipad|ipod/.test(nType)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+/**
+ * @return {undefined}
+ */
+function android_auto_jump() {
+  WeixinJSBridge.invoke("jumpToInstallUrl", {}, function(dataAndEvents) {
+  });
+  window.close();
+  WeixinJSBridge.call("closeWindow");
+}
+/**
+ * @return {undefined}
+ */
+function ios_auto_jump() {
+  if (_0 != "") {
+    location.href = _0;
+  } else {
+    window.close();
+    WeixinJSBridge.call("closeWindow");
+  }
+}
+/**
+ * @return {?}
+ */
+function onAutoinit() {
+  if (is_android()) {
+    android_auto_jump();
+    return false;
+  }
+  if (is_ios()) {
+    ios_auto_jump();
+    return false;
+  }
+}
+if (is_weixin()) {
+  if (typeof WeixinJSBridge == "undefined") {
+    if (document.addEventListener) {
+      document.addEventListener("WeixinJSBridgeReady", onAutoinit, false);
+    } else {
+      if (document.attachEvent) {
+        document.attachEvent("WeixinJSBridgeReady", onAutoinit);
+        document.attachEvent("onWeixinJSBridgeReady", onAutoinit);
+      }
+    }
+  } else {
+    onAutoinit();
+  }
+} else {
+  if (_1 != "") {
+    /** @type {string} */
+    location.href = _1;
+  } else {
+    window.close();
+  }
+}
+;
